@@ -6,41 +6,20 @@
   <title>Solo para usted 🔒</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
   <style>
-    /* Lluvia de corazones */
-    .rain{
-      position:fixed;
-      inset:0;
-      width:100%;
-      height:100%;
-      z-index:0;
-      pointer-events:none;
-      opacity:.9;
-    }
+    .rain{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:.9;}
     .wrap, .card, footer{position:relative; z-index:1}
     .bigFinal{
-      margin-top:14px;
-      font-size: 20px;
-      font-weight: 900;
-      text-align:center;
-      padding: 12px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.22);
+      margin-top:14px; font-size:20px; font-weight:900; text-align:center;
+      padding:12px; border-radius:18px; background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
     }
     .contentRow{
-      display:grid;
-      grid-template-columns: 260px 1fr;
-      gap: 12px;
-      align-items:start;
-      margin-top: 14px;
+      display:grid; grid-template-columns:260px 1fr; gap:12px; align-items:start; margin-top:14px;
     }
     @media (max-width:720px){ .contentRow{grid-template-columns:1fr} }
     .lovePic{
-      width:100%;
-      max-height: 320px;
-      object-fit:cover;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.2);
+      width:100%; max-height:320px; object-fit:cover; border-radius:20px;
+      border:1px solid rgba(255,255,255,.2);
     }
     .msg{margin-top:10px}
     .hidden{display:none !important}
@@ -57,19 +36,6 @@
         <h1 class="title small">Solo para usted 🔒</h1>
       </div>
 
-      <!-- 🎵 Música -->
-      <div class="audioBox">
-        <button id="btnPlayMusic" class="btn">Reproducir música 🎵</button>
-
-        <div class="volRow">
-          <span>🔊</span>
-          <input id="vol" type="range" min="0" max="100" value="75" />
-          <span id="volLabel">75%</span>
-        </div>
-      </div>
-
-      <audio id="bgAudio" src="assets/music/solo.mp3" preload="auto" loop></audio>
-
       <!-- 🔒 BLOQUEADO -->
       <div id="locked" style="margin-top:14px;">
         <h2 class="title small">Texto bloqueado 🔐</h2>
@@ -80,11 +46,18 @@
           <small>(solo tienes 3 intentos)</small>
         </div>
 
-        <input id="pass2" class="input" type="password" placeholder="escribe aquí" autocomplete="off" />
+        <input id="pass2" class="input" type="text" placeholder="escribe aquí" autocomplete="off" />
 
         <div class="row" style="margin-top:10px;">
           <button id="try" class="btn primary">Desbloquear</button>
           <button id="codeBtn" class="btn hidden">Password code</button>
+        </div>
+
+        <!-- 👇 Zona para ingresar el code (aparece solo si falla 3 veces y toca el botón) -->
+        <div id="codeArea" class="hidden" style="margin-top:10px;">
+          <label class="label" for="codeInput">Ingrese Password code</label>
+          <input id="codeInput" class="input" type="text" placeholder="code..." autocomplete="off" />
+          <button id="codeTry" class="btn primary" style="margin-top:10px;">Verificar code</button>
         </div>
 
         <p id="msg2" class="msg"></p>
@@ -92,6 +65,19 @@
 
       <!-- 💖 DESBLOQUEADO -->
       <div id="unlocked" class="hidden" style="margin-top:12px;">
+        <!-- 🎵 Música (SOLO después de desbloquear) -->
+        <div class="audioBox">
+          <button id="btnPlayMusic" class="btn">Reproducir música 🎵</button>
+
+          <div class="volRow">
+            <span>🔊</span>
+            <input id="vol" type="range" min="0" max="100" value="75" />
+            <span id="volLabel">75%</span>
+          </div>
+        </div>
+
+        <audio id="bgAudio" src="assets/music/solo.mp3" preload="auto" loop></audio>
+
         <h2 class="title">Para mi amor 💖</h2>
         <p class="subtitle">Esto es solo para ti…</p>
 
@@ -121,31 +107,19 @@
   <script src="assets/js/app.js"></script>
   <script>
     // 🔐 Protección de página (login principal)
+    // (si tu LoveApp.protect falla, avísame y lo pongo directo con localStorage)
     LoveApp.protect();
 
-    // 🎵 Música + volumen
-    const audio = document.getElementById("bgAudio");
-    const playBtn = document.getElementById("btnPlayMusic");
-    const vol = document.getElementById("vol");
-    const volLabel = document.getElementById("volLabel");
-
-    audio.volume = 0.75;
-
-    playBtn.addEventListener("click", () => {
-      audio.play().catch(()=>{});
-      playBtn.textContent = "Música activada 🎶";
-    });
-
-    vol.addEventListener("input", () => {
-      audio.volume = vol.value / 100;
-      volLabel.textContent = vol.value + "%";
-    });
-
-    // ====== BLOQUEO 3 INTENTOS (persistente) ======
-    // Esto hace que si falla 3 veces, quede bloqueado incluso si recarga.
-    const LOCK_KEY = "solo_locked_v1";
-    const TRIES_KEY = "solo_tries_v1";
+    // ====== CONFIG ======
+    const LOCK_KEY = "solo_locked_v2";
+    const TRIES_KEY = "solo_tries_v2";
     const MAX_TRIES = 3;
+
+    // Password principal (3 intentos)
+    const PASS_OK = "te amo";
+
+    // Password code (secreto) - NO se muestra nunca
+    const CODE_OK = "mi bb hermosa";
 
     const pass2 = document.getElementById("pass2");
     const tryBtn = document.getElementById("try");
@@ -154,36 +128,55 @@
     const locked = document.getElementById("locked");
     const unlocked = document.getElementById("unlocked");
 
+    const codeArea = document.getElementById("codeArea");
+    const codeInput = document.getElementById("codeInput");
+    const codeTry = document.getElementById("codeTry");
+
     function normalize(s){
       return (s ?? "").toString().trim().toLowerCase();
     }
 
     function setLockedUI(){
-      // Bloquear para que solo se vea Password code
       pass2.disabled = true;
       tryBtn.classList.add("hidden");
       codeBtn.classList.remove("hidden");
-      msg2.textContent = "🔒 Se bloqueó por intentos. Usa Password code.";
+      msg2.textContent = "🔒 Se bloqueó por intentos. Presione Password code.";
     }
 
-    function unlockUI(){
+    function showUnlocked(){
       locked.classList.add("hidden");
       unlocked.classList.remove("hidden");
       localStorage.removeItem(TRIES_KEY);
       localStorage.removeItem(LOCK_KEY);
       startHeartRain();
+      initSoloMusic();
     }
 
-    // Si ya quedó bloqueado antes
+    // Si quedó bloqueado desde antes
     if (localStorage.getItem(LOCK_KEY) === "1") {
       setLockedUI();
     }
 
+    // Al presionar Password code: muestra el input para que ella lo ingrese (pero no lo revelamos)
     codeBtn.addEventListener("click", () => {
-      // El CODE que tú quieres
-      msg2.textContent = 'Password code: "Mi bb hermosa" 💗';
+      codeArea.classList.remove("hidden");
+      msg2.textContent = "Ingrese el Password code.";
+      codeInput.focus();
     });
 
+    // Verificar code ingresado
+    codeTry.addEventListener("click", () => {
+      const v = normalize(codeInput.value);
+      if (v === normalize(CODE_OK)) {
+        showUnlocked();
+      } else {
+        msg2.textContent = "❌ Code incorrecto.";
+        codeInput.value = "";
+        codeInput.focus();
+      }
+    });
+
+    // Verificar password principal (3 intentos)
     tryBtn.addEventListener("click", () => {
       if (localStorage.getItem(LOCK_KEY) === "1") {
         setLockedUI();
@@ -191,13 +184,13 @@
       }
 
       const v = normalize(pass2.value);
-      if (v === "te amo") {
-        unlockUI();
+
+      if (v === normalize(PASS_OK)) {
+        showUnlocked();
         return;
       }
 
-      let tries = parseInt(localStorage.getItem(TRIES_KEY) || "0", 10);
-      tries += 1;
+      let tries = parseInt(localStorage.getItem(TRIES_KEY) || "0", 10) + 1;
       localStorage.setItem(TRIES_KEY, String(tries));
 
       const left = Math.max(0, MAX_TRIES - tries);
@@ -216,7 +209,35 @@
       if (e.key === "Enter") tryBtn.click();
     });
 
-    // 💗 Lluvia de corazones con palabras
+    codeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") codeTry.click();
+    });
+
+    // ===== Música (solo después de desbloquear) =====
+    function initSoloMusic(){
+      const audio = document.getElementById("bgAudio");
+      const playBtn = document.getElementById("btnPlayMusic");
+      const vol = document.getElementById("vol");
+      const volLabel = document.getElementById("volLabel");
+
+      if (!audio || !playBtn || !vol || !volLabel) return;
+
+      audio.volume = 0.75;
+      vol.value = "75";
+      volLabel.textContent = "75%";
+
+      playBtn.addEventListener("click", () => {
+        audio.play().catch(()=>{});
+        playBtn.textContent = "Música activada 🎶";
+      });
+
+      vol.addEventListener("input", () => {
+        audio.volume = Number(vol.value) / 100;
+        volLabel.textContent = vol.value + "%";
+      });
+    }
+
+    // ===== Lluvia de corazones =====
     const words = [
       "Bella","linda","guapa","mía","especial","simpática","buen humor",
       "bonito pelo","bonita sonrisa","bonitos ojos","muy mía"
@@ -268,7 +289,6 @@
 
         for(const h of hearts){
           h.y += h.vy;
-
           ctx.globalAlpha = h.big ? 0.98 : 0.85;
           ctx.font = `${h.big ? "900" : "700"} ${h.big ? 18 : 13}px system-ui, Arial`;
           ctx.fillText("💗", h.x, h.y);
