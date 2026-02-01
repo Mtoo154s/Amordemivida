@@ -6,6 +6,7 @@
   <title>Cartas 💌</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
+
 <body class="hearts-bg">
   <div class="wrap">
     <div class="card glow">
@@ -14,49 +15,92 @@
         <h1 class="title small">Cartas 💌</h1>
       </div>
 
-      <p class="subtitle">Elige una carta, mi vida</p>
+      <p class="subtitle">Elige una carta, mi vida 💗</p>
 
-      <div class="row">
-        <button class="btn primary" id="c1">Carta 1</button>
-        <button class="btn primary" id="c2">Carta 2</button>
+      <!-- 🎵 Música Cartas -->
+      <div class="audioBox">
+        <button id="btnPlayMusic" class="btn">Reproducir música 🎵</button>
+
+        <div class="volRow">
+          <span>🔊</span>
+          <input id="vol" type="range" min="0" max="100" value="75" />
+          <span id="volLabel">75%</span>
+        </div>
       </div>
 
+      <audio id="bgAudio" src="assets/music/cartas.mp3" preload="auto" loop></audio>
+
+      <!-- Botones de cartas -->
+      <div class="row" style="margin-top:14px;">
+        <button class="btn primary" id="btnCarta1">Carta 1</button>
+        <button class="btn primary" id="btnCarta2">Carta 2</button>
+      </div>
+
+      <!-- Contenido -->
       <div id="letter" class="letter hidden"></div>
     </div>
 
-    <footer class="footer">Desarrollado con el amor que le tengo ❤️</footer>
+    <footer class="footer">
+      Desarrollado con el amor que le tengo ❤️
+    </footer>
   </div>
 
   <script src="assets/js/app.js"></script>
   <script>
-    LoveApp.guardOrRedirect("cartas.html", "index.html");
+    // Proteger acceso (si no hizo login)
+    LoveApp.protect();
 
-    const el = document.getElementById("letter");
+    // Música + volumen 75%
+    const audio = document.getElementById("bgAudio");
+    const playBtn = document.getElementById("btnPlayMusic");
+    const vol = document.getElementById("vol");
+    const volLabel = document.getElementById("volLabel");
+
+    audio.volume = 0.75;
+
+    playBtn.addEventListener("click", () => {
+      audio.play().catch(()=>{});
+      playBtn.textContent = "Música activada 🎶";
+    });
+
+    vol.addEventListener("input", () => {
+      audio.volume = vol.value / 100;
+      volLabel.textContent = vol.value + "%";
+    });
+
+    // Cartas
+    const box = document.getElementById("letter");
 
     const carta1 = `
       <h2>Mi amor 💗</h2>
       <p>
-        Esta es tu primera carta. Aquí va tu texto lindo (yo lo dejo listo y tú me dices qué quieres poner).
+        (Aquí va la Carta 1. Escríbeme el texto y te lo dejo precioso.)
       </p>
       <p>
-        Gracias por existir y por hacer mi mundo más bonito.
+        Gracias por existir, por tu sonrisa, por tu forma de ser… por todo.
       </p>
-      <p class="sig">— Con amor, tu camotito 🥺</p>
+      <p class="sig">— Con amor, siempre tuyo ❤️</p>
     `;
 
     const carta2 = `
-      <h2>Para la dueña de mi corazón 💘</h2>
+      <h2>Para mi amorcito 💘</h2>
       <p>
-        Esta es tu segunda carta. Puedes contar un recuerdo, una promesa, una canción, lo que quieras.
+        (Aquí va la Carta 2. Me mandas lo que quieres decirle y lo formateo lindo.)
       </p>
       <p>
         Eres mi lugar favorito.
       </p>
-      <p class="sig">— Siempre tuyo ❤️</p>
+      <p class="sig">— Te amo muchísimo 💗</p>
     `;
 
-    document.getElementById("c1").onclick = () => LoveApp.showLetter(el, carta1);
-    document.getElementById("c2").onclick = () => LoveApp.showLetter(el, carta2);
+    function show(html){
+      box.classList.remove("hidden");
+      box.innerHTML = html;
+      box.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    document.getElementById("btnCarta1").addEventListener("click", () => show(carta1));
+    document.getElementById("btnCarta2").addEventListener("click", () => show(carta2));
   </script>
 </body>
 </html>
