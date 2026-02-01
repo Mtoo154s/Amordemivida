@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Solo para usted 🔒</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="hearts-bg">
+  <canvas id="rain" class="rain"></canvas>
+
+  <div class="wrap">
+    <div class="card glow">
+      <div class="topbar">
+        <a class="btn" href="home.html">⬅ Volver</a>
+        <h1 class="title small">Solo para usted 🔒</h1>
+      </div>
+
+      <div id="locked">
+        <h2 class="title small">Texto bloqueado 🔐</h2>
+        <p class="subtitle">Ingrese password</p>
+
+        <div class="hint">
+          🧩 Pista: <b>Una palabra que siempre nos decimos</b><br/>
+          <small>(solo tienes 3 intentos)</small>
+        </div>
+
+        <input id="pass2" class="input" type="password" placeholder="escribe aquí" autocomplete="off" />
+        <div class="row">
+          <button id="try" class="btn primary">Desbloquear</button>
+          <button id="codeBtn" class="btn hidden">Password code</button>
+        </div>
+        <p id="msg2" class="msg"></p>
+      </div>
+
+      <div id="unlocked" class="hidden">
+        <h2 class="title">Para mi amor de mi life 💖</h2>
+
+        <div class="contentRow">
+          <img class="lovePic" src="assets/img/photo1.jpg" alt="Tu foto aquí" />
+          <div class="letter">
+            <p>
+              (Aquí va tu texto especial + romántico. Me lo mandas y lo dejo precioso.)
+            </p>
+            <p class="sig">— Te amo muchísimo 💗</p>
+
+            <div class="row">
+              <button class="btn primary" id="playSolo">Reproducir canción 🎶</button>
+              <button class="btn" id="stopSolo">Pausar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bigFinal">Para el amor de mi life 💘</div>
+      </div>
+    </div>
+
+    <footer class="footer">Desarrollado con el amor que le tengo ❤️</footer>
+  </div>
+
+  <audio id="soloAudio" src="assets/music/solo.mp3" preload="auto" loop></audio>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    LoveApp.guardOrRedirect("solo.html", "index.html");
+
+    LoveApp.initSoloLock({
+      correct: "te amo",
+      passInputId: "pass2",
+      tryBtnId: "try",
+      codeBtnId: "codeBtn",
+      msgId: "msg2",
+      lockedId: "locked",
+      unlockedId: "unlocked",
+      maxTries: 3
+    });
+
+    LoveApp.initHeartRain({
+      canvasId: "rain",
+      words: [
+        "Bella","linda","guapa","mía","especial","simpática","buen humor",
+        "bonito pelo","bonita sonrisa","bonitos ojos","muy mía"
+      ],
+      finalWord: "Para el amor de mi life"
+    });
+
+    document.getElementById("playSolo").onclick = () => LoveApp.playAudio("soloAudio");
+    document.getElementById("stopSolo").onclick = () => LoveApp.pauseAudio("soloAudio");
+  </script>
+</body>
+</html>
