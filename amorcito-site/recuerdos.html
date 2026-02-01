@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recuerdos 🧠</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="hearts-bg">
+  <div class="wrap">
+    <div class="card glow">
+      <div class="topbar">
+        <a class="btn" href="home.html">⬅ Volver</a>
+        <h1 class="title small">Recuerdos 🧠</h1>
+      </div>
+
+      <p class="subtitle">Tres recuerdos (tú me dices qué texto va en cada uno)</p>
+
+      <div class="row">
+        <button class="btn primary" data-r="1">Recuerdo 1</button>
+        <button class="btn primary" data-r="2">Recuerdo 2</button>
+        <button class="btn primary" data-r="3">Recuerdo 3</button>
+      </div>
+
+      <div id="recBox" class="letter hidden"></div>
+    </div>
+
+    <footer class="footer">Desarrollado con el amor que le tengo ❤️</footer>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    LoveApp.guardOrRedirect("recuerdos.html", "index.html");
+
+    const box = document.getElementById("recBox");
+    const recuerdos = {
+      1: `<h2>Recuerdo 1 💞</h2><p>Aquí va el primer recuerdo.</p>`,
+      2: `<h2>Recuerdo 2 💗</h2><p>Aquí va el segundo recuerdo.</p>`,
+      3: `<h2>Recuerdo 3 💘</h2><p>Aquí va el tercer recuerdo.</p>`
+    };
+
+    document.querySelectorAll("[data-r]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        LoveApp.showLetter(box, recuerdos[btn.dataset.r]);
+      });
+    });
+  </script>
+</body>
+</html>
