@@ -12,7 +12,7 @@
     <div class="card glow">
       <h1 class="title">Verifícate bb 💗</h1>
 
-      <p class="subtitle">User: <b>Camote predeterminado</b></p>
+      <p class="subtitle">User: <b>Camote</b></p>
 
       <div class="hint">
         <div>🧩 Pista: <b>El día que inició todo</b></div>
@@ -20,12 +20,13 @@
       </div>
 
       <div class="form">
-        <label class="label" for="pass1">Contraseña</label>
-        <input id="pass1" class="input" type="password" placeholder="••••••" autocomplete="off" />
+        <label class="label" for="pass1">Contraseña (visible)</label>
+        <!-- visible -->
+        <input id="pass1" class="input" type="text" placeholder="Escribe aquí..." autocomplete="off" />
 
         <button id="btnLogin" class="btn primary">Entrar</button>
 
-        <!-- Música + Volumen -->
+        <!-- 🎵 Música + Volumen -->
         <div class="audioBox">
           <button id="btnStartMusic" class="btn">Iniciar música 🎶</button>
 
@@ -45,20 +46,67 @@
     </footer>
   </div>
 
-  <!-- AUDIO LOGIN (Loco tu forma de ser) -->
+  <!-- AUDIO (asegúrate que exista: amorcito-site/assets/music/login.mp3) -->
   <audio id="bgAudio" src="assets/music/login.mp3" preload="auto" loop></audio>
 
-  <script src="assets/js/app.js"></script>
   <script>
-    // 1) Volumen 75% + slider + botón
-    LoveApp.initMusicUI("bgAudio", "btnStartMusic", "vol", "volLabel");
+    // ===== CONFIG =====
+    const CORRECT_PASS = "16-04-25";
+    const NEXT_PAGE = "home.html";
 
-    // 2) Login
-    LoveApp.initLogin();
+    const passInput = document.getElementById("pass1");
+    const btnLogin = document.getElementById("btnLogin");
+    const msg = document.getElementById("msg");
 
-    // 3) Cuando aprieta "Entrar", intentamos reproducir también (por si no tocó el botón)
-    document.getElementById("btnLogin").addEventListener("click", () => {
-      try { document.getElementById("bgAudio").play(); } catch(e) {}
+    const audio = document.getElementById("bgAudio");
+    const btnMusic = document.getElementById("btnStartMusic");
+    const vol = document.getElementById("vol");
+    const volLabel = document.getElementById("volLabel");
+
+    // Volumen inicial 75%
+    audio.volume = 0.75;
+
+    // Slider volumen (actualiza audio + texto)
+    function setVolUI(v){
+      const n = Math.max(0, Math.min(100, Number(v)));
+      vol.value = String(n);
+      volLabel.textContent = `${n}%`;
+      audio.volume = n / 100;
+    }
+    setVolUI(75);
+
+    vol.addEventListener("input", () => setVolUI(vol.value));
+
+    // Iniciar música (necesario por bloqueo autoplay)
+    btnMusic.addEventListener("click", async () => {
+      try {
+        await audio.play();
+        btnMusic.textContent = "Música activada 🎶";
+      } catch (e) {
+        msg.textContent = "Tu navegador bloqueó el audio. Toca el botón otra vez.";
+      }
+    });
+
+    // Login
+    function doLogin(){
+      const v = (passInput.value || "").trim();
+      if (v === CORRECT_PASS) {
+        // guarda auth para proteger otras páginas
+        localStorage.setItem("love_auth", "1");
+
+        msg.textContent = "💗 Correcto bb... entrando";
+        // intenta reproducir (como ya hubo click)
+        audio.play().catch(()=>{});
+        setTimeout(() => location.href = NEXT_PAGE, 450);
+      } else {
+        msg.textContent = "❌ Contraseña incorrecta bb";
+        passInput.focus();
+      }
+    }
+
+    btnLogin.addEventListener("click", doLogin);
+    passInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") doLogin();
     });
   </script>
 </body>
