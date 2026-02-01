@@ -6,6 +6,7 @@
   <title>Verifícate bb</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
+
 <body class="hearts-bg">
   <div class="wrap">
     <div class="card glow">
@@ -21,8 +22,20 @@
       <div class="form">
         <label class="label" for="pass1">Contraseña</label>
         <input id="pass1" class="input" type="password" placeholder="••••••" autocomplete="off" />
+
         <button id="btnLogin" class="btn primary">Entrar</button>
-        <button id="btnStartMusic" class="btn">Iniciar música 🎶</button>
+
+        <!-- Música + Volumen -->
+        <div class="audioBox">
+          <button id="btnStartMusic" class="btn">Iniciar música 🎶</button>
+
+          <div class="volRow">
+            <span>🔊</span>
+            <input id="vol" type="range" min="0" max="100" value="75" />
+            <span id="volLabel">75%</span>
+          </div>
+        </div>
+
         <p id="msg" class="msg"></p>
       </div>
     </div>
@@ -32,18 +45,20 @@
     </footer>
   </div>
 
-  <audio id="introAudio" src="assets/music/intro.mp3" preload="auto" loop></audio>
+  <!-- AUDIO LOGIN (Loco tu forma de ser) -->
+  <audio id="bgAudio" src="assets/music/login.mp3" preload="auto" loop></audio>
 
   <script src="assets/js/app.js"></script>
   <script>
-    LoveApp.initLoginPage({
-      correctPass: "16-04-25",
-      next: "home.html",
-      audioId: "introAudio",
-      passInputId: "pass1",
-      loginBtnId: "btnLogin",
-      startMusicBtnId: "btnStartMusic",
-      msgId: "msg"
+    // 1) Volumen 75% + slider + botón
+    LoveApp.initMusicUI("bgAudio", "btnStartMusic", "vol", "volLabel");
+
+    // 2) Login
+    LoveApp.initLogin();
+
+    // 3) Cuando aprieta "Entrar", intentamos reproducir también (por si no tocó el botón)
+    document.getElementById("btnLogin").addEventListener("click", () => {
+      try { document.getElementById("bgAudio").play(); } catch(e) {}
     });
   </script>
 </body>
