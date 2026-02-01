@@ -3,31 +3,95 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fotos 📸</title>
+  <title>Fotos 💞</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <style>
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap:14px;
+      margin-top:16px;
+    }
+    .gallery img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.25);
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      transition: transform .3s ease;
+    }
+    .gallery img:hover{
+      transform: scale(1.04);
+    }
+  </style>
 </head>
+
 <body class="hearts-bg">
   <div class="wrap">
     <div class="card glow">
       <div class="topbar">
         <a class="btn" href="home.html">⬅ Volver</a>
-        <h1 class="title small">Fotos 📸</h1>
+        <h1 class="title small">Fotos 💞</h1>
       </div>
 
-      <p class="subtitle">Aquí van nuestras fotitos 💞</p>
+      <p class="subtitle">
+        Momentos que me gustan mucho 💗
+      </p>
 
+      <!-- 🎵 Música Fotos (puedes cambiarla si quieres) -->
+      <div class="audioBox">
+        <button id="btnPlayMusic" class="btn">Reproducir música 🎵</button>
+
+        <div class="volRow">
+          <span>🔊</span>
+          <input id="vol" type="range" min="0" max="100" value="75" />
+          <span id="volLabel">75%</span>
+        </div>
+      </div>
+
+      <audio id="bgAudio" src="assets/music/menu.mp3" preload="auto" loop></audio>
+
+      <!-- 📸 GALERÍA -->
       <div class="gallery">
-        <!-- Reemplaza / agrega las fotos que me mandes -->
-        <img src="assets/img/photo1.jpg" alt="Foto 1" />
-        <img src="assets/img/photo2.jpg" alt="Foto 2" />
-        <img src="assets/img/photo3.jpg" alt="Foto 3" />
+        <img src="assets/img/foto1.jpg" alt="foto 1" />
+        <img src="assets/img/foto2.jpg" alt="foto 2" />
+        <img src="assets/img/foto3.jpg" alt="foto 3" />
+        <img src="assets/img/foto4.jpg" alt="foto 4" />
+        <img src="assets/img/foto5.jpg" alt="foto 5" />
+        <img src="assets/img/foto6.jpg" alt="foto 6" />
       </div>
     </div>
 
-    <footer class="footer">Desarrollado con el amor que le tengo ❤️</footer>
+    <footer class="footer">
+      Desarrollado con el amor que le tengo ❤️
+    </footer>
   </div>
 
-  <script src="assets/js/app.js"></script>
-  <script>LoveApp.guardOrRedirect("fotos.html", "index.html");</script>
+  <script>
+    // 🔐 Protección simple
+    if (localStorage.getItem("love_auth") !== "1") {
+      location.href = "index.html";
+    }
+
+    // 🎵 Música + volumen
+    const audio = document.getElementById("bgAudio");
+    const playBtn = document.getElementById("btnPlayMusic");
+    const vol = document.getElementById("vol");
+    const volLabel = document.getElementById("volLabel");
+
+    audio.volume = 0.75;
+
+    playBtn.addEventListener("click", () => {
+      audio.play().catch(()=>{});
+      playBtn.textContent = "Música activada 🎶";
+    });
+
+    vol.addEventListener("input", () => {
+      audio.volume = vol.value / 100;
+      volLabel.textContent = vol.value + "%";
+    });
+  </script>
 </body>
 </html>
