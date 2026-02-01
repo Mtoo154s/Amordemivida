@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Verifícate bb</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="hearts-bg">
+  <div class="wrap">
+    <div class="card glow">
+      <h1 class="title">Verifícate bb 💗</h1>
+
+      <p class="subtitle">User: <b>Camote predeterminado</b></p>
+
+      <div class="hint">
+        <div>🧩 Pista: <b>El día que inició todo</b></div>
+        <div class="roman">XVI</div>
+      </div>
+
+      <div class="form">
+        <label class="label" for="pass1">Contraseña</label>
+        <input id="pass1" class="input" type="password" placeholder="••••••" autocomplete="off" />
+        <button id="btnLogin" class="btn primary">Entrar</button>
+        <button id="btnStartMusic" class="btn">Iniciar música 🎶</button>
+        <p id="msg" class="msg"></p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      Desarrollado con el amor que le tengo ❤️
+    </footer>
+  </div>
+
+  <audio id="introAudio" src="assets/music/intro.mp3" preload="auto" loop></audio>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    LoveApp.initLoginPage({
+      correctPass: "16-04-25",
+      next: "home.html",
+      audioId: "introAudio",
+      passInputId: "pass1",
+      loginBtnId: "btnLogin",
+      startMusicBtnId: "btnStartMusic",
+      msgId: "msg"
+    });
+  </script>
+</body>
+</html>
