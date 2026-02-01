@@ -71,30 +71,59 @@
 
     // 🧠 Recuerdos
     const box = document.getElementById("recBox");
+const recuerdos = {
+  1: `
+    <h2>Recuerdo 1 💗</h2>
+    <p>
+      Cuando usted me estaba pidiendo pololeo jsjs…
+      ay bb, en ese momento yo estaba <b>muy, muy nervioso</b>,
+      pero de verdad MUCHO jsjs.
+    </p>
+    <p>
+      Sentía que me moría ahí mismo,
+      pero obviamente le iba a decir que sí,
+      porque <b>la amo mucho</b> y no había otra respuesta posible.
+    </p>
+    <p class="sig">— Ese día mi corazón dijo que sí 💘</p>
+  `,
 
-    const recuerdos = {
-      1: `
-        <h2>Recuerdo 1 💗</h2>
-        <p>
-          (Aquí va tu primer recuerdo. Cuéntale ese momento especial.)
-        </p>
-        <p class="sig">— Siempre contigo ❤️</p>
-      `,
-      2: `
-        <h2>Recuerdo 2 💘</h2>
-        <p>
-          (Aquí va el segundo recuerdo. Puede ser algo gracioso o bonito.)
-        </p>
-        <p class="sig">— Mi lugar favorito eres tú 💞</p>
-      `,
-      3: `
-        <h2>Recuerdo 3 💞</h2>
-        <p>
-          (Aquí va el tercer recuerdo. Uno que nunca olvidarás.)
-        </p>
-        <p class="sig">— Para siempre 💖</p>
-      `
-    };
+  2: `
+    <h2>Recuerdo 2 💞</h2>
+    <p>
+      Cuando usted entró y me estaba contando algo,
+      y yo le di un beso jsjs…
+    </p>
+    <p>
+      En ese momento fue muy bonito,
+      pero no le voy a mentir,
+      <b>igual me dio vergüenza</b> jsjs.
+    </p>
+    <p>
+      Aun así, fue uno de esos momentos
+      que se quedan guardados en el corazón.
+    </p>
+    <p class="sig">— Un beso que no olvido 💗</p>
+  `,
+
+  3: `
+    <h2>Recuerdo 3 💖</h2>
+    <p>
+      Cuando estábamos en el kiosko Combi
+      y usted me botó sjksjs 😭
+    </p>
+    <p>
+      Y después lo de la araña de rincón…
+      ay bb, qué risa y qué susto al mismo tiempo jsjs.
+    </p>
+    <p>
+      Son esas tonteras las que hacen todo más lindo,
+      porque con usted hasta caerse es un recuerdo bonito.
+    </p>
+    <p class="sig">— Siempre riéndome con usted 💘</p>
+  `
+};
+
+   
 
     document.querySelectorAll("[data-r]").forEach(btn => {
       btn.addEventListener("click", () => {
