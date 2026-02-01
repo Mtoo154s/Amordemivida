@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Para ti 💘</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="hearts-bg">
+  <div class="wrap">
+    <div class="card glow">
+      <div class="hero">
+        <div class="float-heart">💗</div>
+        <div class="plane" aria-hidden="true">✈️ <span>te amo</span></div>
+      </div>
+
+      <h1 class="title">Solo para ti, mi amor 💞</h1>
+      <p class="subtitle">Elige a dónde quieres ir, bb</p>
+
+      <div class="grid">
+        <a class="tile" href="cartas.html">💌 Cartas</a>
+        <a class="tile" href="fotos.html">📸 Fotos</a>
+        <a class="tile" href="recuerdos.html">🧠 Recuerdos</a>
+        <a class="tile special" href="solo.html">🔒 Solo para usted</a>
+      </div>
+
+      <div class="mini">
+        <button class="btn" id="btnLogout">Cerrar (volver al inicio)</button>
+      </div>
+    </div>
+
+    <footer class="footer">Desarrollado con el amor que le tengo ❤️</footer>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    LoveApp.guardOrRedirect("home.html", "index.html");
+    document.getElementById("btnLogout").addEventListener("click", () => {
+      LoveApp.logout();
+      location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
