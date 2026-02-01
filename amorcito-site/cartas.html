@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cartas 💌</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="hearts-bg">
+  <div class="wrap">
+    <div class="card glow">
+      <div class="topbar">
+        <a class="btn" href="home.html">⬅ Volver</a>
+        <h1 class="title small">Cartas 💌</h1>
+      </div>
+
+      <p class="subtitle">Elige una carta, mi vida</p>
+
+      <div class="row">
+        <button class="btn primary" id="c1">Carta 1</button>
+        <button class="btn primary" id="c2">Carta 2</button>
+      </div>
+
+      <div id="letter" class="letter hidden"></div>
+    </div>
+
+    <footer class="footer">Desarrollado con el amor que le tengo ❤️</footer>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    LoveApp.guardOrRedirect("cartas.html", "index.html");
+
+    const el = document.getElementById("letter");
+
+    const carta1 = `
+      <h2>Mi amor 💗</h2>
+      <p>
+        Esta es tu primera carta. Aquí va tu texto lindo (yo lo dejo listo y tú me dices qué quieres poner).
+      </p>
+      <p>
+        Gracias por existir y por hacer mi mundo más bonito.
+      </p>
+      <p class="sig">— Con amor, tu camotito 🥺</p>
+    `;
+
+    const carta2 = `
+      <h2>Para la dueña de mi corazón 💘</h2>
+      <p>
+        Esta es tu segunda carta. Puedes contar un recuerdo, una promesa, una canción, lo que quieras.
+      </p>
+      <p>
+        Eres mi lugar favorito.
+      </p>
+      <p class="sig">— Siempre tuyo ❤️</p>
+    `;
+
+    document.getElementById("c1").onclick = () => LoveApp.showLetter(el, carta1);
+    document.getElementById("c2").onclick = () => LoveApp.showLetter(el, carta2);
+  </script>
+</body>
+</html>
