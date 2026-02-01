@@ -3,21 +3,61 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Recuerdos 🧠</title>
+  <title>Solo para usted 🔒</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    /* Lluvia de corazones */
+    .rain{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:0;
+      pointer-events:none;
+      opacity:.9;
+    }
+    .wrap, .card, footer{position:relative; z-index:1}
+    .bigFinal{
+      margin-top:14px;
+      font-size: 20px;
+      font-weight: 900;
+      text-align:center;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.22);
+    }
+    .contentRow{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap: 12px;
+      align-items:start;
+      margin-top: 14px;
+    }
+    @media (max-width:720px){ .contentRow{grid-template-columns:1fr} }
+    .lovePic{
+      width:100%;
+      max-height: 320px;
+      object-fit:cover;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+    .msg{margin-top:10px}
+    .hidden{display:none !important}
+  </style>
 </head>
 
 <body class="hearts-bg">
+  <canvas id="rain" class="rain"></canvas>
+
   <div class="wrap">
     <div class="card glow">
       <div class="topbar">
         <a class="btn" href="home.html">⬅ Volver</a>
-        <h1 class="title small">Recuerdos 🧠</h1>
+        <h1 class="title small">Solo para usted 🔒</h1>
       </div>
 
-      <p class="subtitle">Momentos que guardo en mi corazón 💞</p>
-
-      <!-- 🎵 Música Recuerdos -->
+      <!-- 🎵 Música -->
       <div class="audioBox">
         <button id="btnPlayMusic" class="btn">Reproducir música 🎵</button>
 
@@ -28,17 +68,50 @@
         </div>
       </div>
 
-      <audio id="bgAudio" src="assets/music/recuerdos.mp3" preload="auto" loop></audio>
+      <audio id="bgAudio" src="assets/music/solo.mp3" preload="auto" loop></audio>
 
-      <!-- Botones de recuerdos -->
-      <div class="row" style="margin-top:16px;">
-        <button class="btn primary" data-r="1">Recuerdo 1</button>
-        <button class="btn primary" data-r="2">Recuerdo 2</button>
-        <button class="btn primary" data-r="3">Recuerdo 3</button>
+      <!-- 🔒 BLOQUEADO -->
+      <div id="locked" style="margin-top:14px;">
+        <h2 class="title small">Texto bloqueado 🔐</h2>
+        <p class="subtitle">Ingrese password</p>
+
+        <div class="hint">
+          🧩 Pista: <b>Una palabra que siempre nos decimos</b><br/>
+          <small>(solo tienes 3 intentos)</small>
+        </div>
+
+        <input id="pass2" class="input" type="password" placeholder="escribe aquí" autocomplete="off" />
+
+        <div class="row" style="margin-top:10px;">
+          <button id="try" class="btn primary">Desbloquear</button>
+          <button id="codeBtn" class="btn hidden">Password code</button>
+        </div>
+
+        <p id="msg2" class="msg"></p>
       </div>
 
-      <!-- Contenido -->
-      <div id="recBox" class="letter hidden"></div>
+      <!-- 💖 DESBLOQUEADO -->
+      <div id="unlocked" class="hidden" style="margin-top:12px;">
+        <h2 class="title">Para mi amor 💖</h2>
+        <p class="subtitle">Esto es solo para ti…</p>
+
+        <div class="contentRow">
+          <!-- Cambia la foto por una de ustedes cuando quieras -->
+          <img class="lovePic" src="assets/img/photo1.jpg" alt="Foto especial" />
+
+          <div class="letter">
+            <p>
+              (Aquí va tu texto especial. Mándamelo y te lo dejo con formato perfecto.)
+            </p>
+            <p>
+              Eres <b>mi persona favorita</b>, mi paz, mi risa… y mi amor.
+            </p>
+            <p class="sig">— Te amo muchísimo 💗</p>
+          </div>
+        </div>
+
+        <div class="bigFinal">Para el amor de mi life 💘</div>
+      </div>
     </div>
 
     <footer class="footer">
@@ -48,7 +121,7 @@
 
   <script src="assets/js/app.js"></script>
   <script>
-    // 🔐 Protección
+    // 🔐 Protección de página (login principal)
     LoveApp.protect();
 
     // 🎵 Música + volumen
@@ -69,40 +142,118 @@
       volLabel.textContent = vol.value + "%";
     });
 
-    // 🧠 Recuerdos
-    const box = document.getElementById("recBox");
+    // 🔒 Password interno (3 intentos)
+    const pass2 = document.getElementById("pass2");
+    const tryBtn = document.getElementById("try");
+    const msg2 = document.getElementById("msg2");
+    const codeBtn = document.getElementById("codeBtn");
+    const locked = document.getElementById("locked");
+    const unlocked = document.getElementById("unlocked");
 
-    const recuerdos = {
-      1: `
-        <h2>Recuerdo 1 💗</h2>
-        <p>
-          (Aquí va tu primer recuerdo. Cuéntale ese momento especial.)
-        </p>
-        <p class="sig">— Siempre contigo ❤️</p>
-      `,
-      2: `
-        <h2>Recuerdo 2 💘</h2>
-        <p>
-          (Aquí va el segundo recuerdo. Puede ser algo gracioso o bonito.)
-        </p>
-        <p class="sig">— Mi lugar favorito eres tú 💞</p>
-      `,
-      3: `
-        <h2>Recuerdo 3 💞</h2>
-        <p>
-          (Aquí va el tercer recuerdo. Uno que nunca olvidarás.)
-        </p>
-        <p class="sig">— Para siempre 💖</p>
-      `
-    };
+    let tries = 0;
 
-    document.querySelectorAll("[data-r]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        box.classList.remove("hidden");
-        box.innerHTML = recuerdos[btn.dataset.r];
-        box.scrollIntoView({behavior:"smooth", block:"start"});
-      });
+    function normalize(s){
+      return (s ?? "").toString().trim().toLowerCase();
+    }
+
+    codeBtn.addEventListener("click", () => {
+      msg2.textContent = "para obtener esta clave hableme y digame que no pudo ingresar y yo la ayudare 💗";
     });
+
+    tryBtn.addEventListener("click", () => {
+      const v = normalize(pass2.value);
+      if (v === "te amo") {
+        locked.classList.add("hidden");
+        unlocked.classList.remove("hidden");
+        startHeartRain(); // 💗 inicia lluvia al desbloquear
+        return;
+      }
+
+      tries++;
+      const left = Math.max(0, 3 - tries);
+      msg2.textContent = `❌ Incorrecto. Te quedan ${left} intento(s).`;
+
+      if (tries >= 3) {
+        codeBtn.classList.remove("hidden");
+      }
+
+      pass2.value = "";
+      pass2.focus();
+    });
+
+    pass2.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") tryBtn.click();
+    });
+
+    // 💗 Lluvia de corazones con palabras
+    const words = [
+      "Bella","linda","guapa","mía","especial","simpática","buen humor",
+      "bonito pelo","bonita sonrisa","bonitos ojos","muy mía"
+    ];
+    const finalWord = "Para el amor de mi life";
+
+    function startHeartRain(){
+      const canvas = document.getElementById("rain");
+      const ctx = canvas.getContext("2d");
+
+      const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+
+      function resize(){
+        canvas.width = Math.floor(window.innerWidth * DPR);
+        canvas.height = Math.floor(window.innerHeight * DPR);
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+      }
+      resize();
+      window.addEventListener("resize", resize);
+
+      const hearts = [];
+      let spawnedFinal = false;
+
+      function pickWord(){
+        return words[Math.floor(Math.random()*words.length)];
+      }
+
+      function spawn(){
+        const isBig = !spawnedFinal && Math.random() < 0.03;
+        if(isBig) spawnedFinal = true;
+
+        hearts.push({
+          x: Math.random() * window.innerWidth,
+          y: -30,
+          vy: 1.2 + Math.random()*2.2,
+          text: isBig ? finalWord : pickWord(),
+          big: isBig
+        });
+
+        if (hearts.length > 140) hearts.shift();
+      }
+
+      function draw(){
+        ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+
+        if (Math.random() < 0.45) spawn();
+
+        for(const h of hearts){
+          h.y += h.vy;
+
+          ctx.globalAlpha = h.big ? 0.98 : 0.85;
+          ctx.font = `${h.big ? "900" : "700"} ${h.big ? 18 : 13}px system-ui, Arial`;
+          ctx.fillText("💗", h.x, h.y);
+          ctx.globalAlpha = 0.95;
+          ctx.fillText(h.text, h.x + (h.big ? 28 : 22), h.y + 2);
+        }
+
+        for(let i = hearts.length - 1; i >= 0; i--){
+          if (hearts[i].y > window.innerHeight + 80) hearts.splice(i,1);
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      requestAnimationFrame(draw);
+    }
   </script>
 </body>
 </html>
