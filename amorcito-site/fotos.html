@@ -75,23 +75,4 @@
       location.href = "index.html";
     }
 
-    // 🎵 Música + volumen
-    const audio = document.getElementById("bgAudio");
-    const playBtn = document.getElementById("btnPlayMusic");
-    const vol = document.getElementById("vol");
-    const volLabel = document.getElementById("volLabel");
-
-    audio.volume = 0.75;
-
-    playBtn.addEventListener("click", () => {
-      audio.play().catch(()=>{});
-      playBtn.textContent = "Música activada 🎶";
-    });
-
-    vol.addEventListener("input", () => {
-      audio.volume = vol.value / 100;
-      volLabel.textContent = vol.value + "%";
-    });
-  </script>
-</body>
 </html>
